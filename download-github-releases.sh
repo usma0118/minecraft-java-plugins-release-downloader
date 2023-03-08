@@ -48,6 +48,10 @@ for url in "${URLS_ARRAY[@]}"; do
 
     # Get the latest release version from the GitHub API
     release=$(curl --silent "https://api.github.com/repos/$owner/$repo/releases/latest" | jq -r '.tag_name')
+    if [ -z "$release" ]; then
+        log_error "Cloud not find any releaes for $owner/$repo"
+        continue
+    fi
 
     # Print the latest release version for debugging
     log_verbose "Latest release: $release"

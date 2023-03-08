@@ -1,7 +1,7 @@
 FROM bash:4.4
 
-# Install required packages
-RUN apk add --no-cache curl jq
+# Install required packages perl-utiils for shasum
+RUN apk add --no-cache curl jq perl-utils
 
 # Create a non-privileged user to run the container.
 RUN adduser --disabled-password --gecos '' appuser
