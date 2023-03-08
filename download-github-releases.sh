@@ -1,13 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Define the GitHub URLs to download from
-if [ -n "$URLS" ]; then
-    urls=($URLS)
-else
-    urls=(
-        "https://github.com/Multiverse/Multiverse-Inventories"
-    )
+if [ -z "$URLS" ]; then
+    echo "Error: URLS environment variable is not set"
+    exit 1
 fi
+urls=$URLS
 
 # Define the logging functions
 log_info() {
@@ -38,7 +36,8 @@ while getopts "v" opt; do
 done
 
 # Loop through each URL and download the latest version if it's not already downloaded
-for url in "${urls[@]}"; do
+IFS=',' read -ra URLS_ARRAY <<< "$urls"
+for url in "${URLS_ARRAY[@]}"; do
     # Extract the owner and repository name from the URL
     owner=$(echo "$url" | cut -d '/' -f 4)
     repo=$(echo "$url" | cut -d '/' -f 5)
@@ -54,16 +53,16 @@ for url in "${urls[@]}"; do
     log_verbose "Latest release: $release"
 
     # Calculate the SHA-256 checksum of the release
-    remote_checksum=$(curl --silent "https://api.github.com/repos/$owner/$repo/releases/latest" | jq -r '.assets[0].browser_download_url' | xargs curl -Ls | shasum -a 256 | awk '{print $1}')
+    checksum=$(curl --silent "https://api.github.com/repos/$owner/$repo/releases/latest" | jq -r '.assets[0].browser_download_url' | xargs curl -Ls | shasum -a 256 | awk '{print $1}')
 
     # Print the checksum for debugging
-    log_verbose "Checksum: $remote_checksum"
+    log_verbose "Checksum: $checksum"
 
     # Define the filename to save the release as
     filename="$repo-$release.zip"
 
     # Check if the file already exists and has the correct checksum
-    if [ -f "$filename" ] && [ "$(shasum -a 256 "$filename" | awk '{print $1}')" = "$remote_checksum" ]; then
+    if [ -f "$filename" ] && [ "$(shasum -a 256 "$filename" | awk '{print $1}')" = "$checksum" ]; then
         log_info "$filename is up to date"
     else
         # Download the release
@@ -78,6 +77,6 @@ for url in "${urls[@]}"; do
         fi
 
         # Print a success message
-        log_info "Download complete."
+        log_info "Downloaded $filename successfully"
     fi
 done
