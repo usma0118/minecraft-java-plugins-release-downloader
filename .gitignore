@@ -1,0 +1,10 @@
+# Ignore everything except the following files and directories
+!Dockerfile
+!License
+!.devcontainer/
+!*.sh
+!*.md
+!*.gitignore
+!*.pre-commit-config.yaml
+# Ignore everything else
+*
