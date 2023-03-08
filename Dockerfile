@@ -12,10 +12,8 @@ COPY download-github-releases.sh /usr/local/bin/
 # Make the script executable.
 RUN chmod +x /usr/local/bin/download-github-releases.sh
 VOLUME [ "/plugins" ]
-ENV URLS="https://github.com/EssentialsX/Essentials,\
-https://github.com/EngineHub/WorldEdit,\
-https://github.com/lucko/LuckPerms,\
-https://github.com/Multiverse/Multiverse-Core"
+# can handle multiple urls seperated by comma
+ENV URLS=""
 
 WORKDIR /tmp
 # Set the default command for the container.
