@@ -1,11 +1,4 @@
-# Use an official lightweight Python image.
-# https://hub.docker.com/_/python
 FROM bash:4.4
-# Use a lightweight base image
-FROM alpine:latest
-
-# Set the working directory
-WORKDIR /app
 
 # Install required packages
 RUN apk add --no-cache curl jq
@@ -19,7 +12,11 @@ COPY download-github-releases.sh /usr/local/bin/
 # Make the script executable.
 RUN chmod +x /usr/local/bin/download-github-releases.sh
 
-ENV URLS=""
+ENV URLS="https://github.com/EssentialsX/Essentials,\
+https://github.com/EngineHub/WorldEdit,\
+https://github.com/lucko/LuckPerms,\
+https://github.com/Multiverse/Multiverse-Core"
+
 
 # Set the default command for the container.
 CMD ["download-github-releases.sh"]
