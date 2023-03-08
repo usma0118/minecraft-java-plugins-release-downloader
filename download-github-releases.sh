@@ -48,13 +48,12 @@ for url in "${URLS_ARRAY[@]}"; do
 
     # Get the latest release version from the GitHub API
     release=$(curl --silent "https://api.github.com/repos/$owner/$repo/releases/latest" | jq -r '.tag_name')
-    if [ -z "$release" ]; then
+    # Print the latest release version for debugging
+    log_verbose "Latest release: $release"
+    if [ -z "$release" ] || [ "$release" = null ]; then
         log_error "Cloud not find any releaes for $owner/$repo"
         continue
     fi
-
-    # Print the latest release version for debugging
-    log_verbose "Latest release: $release"
 
     # Calculate the SHA-256 checksum of the release
     checksum=$(curl --silent "https://api.github.com/repos/$owner/$repo/releases/latest" | jq -r '.assets[0].browser_download_url' | xargs curl -Ls | shasum -a 256 | awk '{print $1}')
