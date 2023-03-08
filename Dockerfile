@@ -19,7 +19,7 @@ COPY download-github-releases.sh /usr/local/bin/
 # Make the script executable.
 RUN chmod +x /usr/local/bin/download-github-releases.sh
 
-ENV URLS=[https://github.com/Multiverse/Multiverse-Inventories]
+ENV URLS=""
 
 # Set the default command for the container.
 CMD ["download-github-releases.sh"]

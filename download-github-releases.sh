@@ -2,7 +2,7 @@
 
 # Define the GitHub URLs to download from
 if [ -z "$URLS" ]; then
-    echo "Error: URLS environment variable is not set"
+    echo "Error: URLS environment variable is empty or not set"
     exit 1
 fi
 urls=$URLS
