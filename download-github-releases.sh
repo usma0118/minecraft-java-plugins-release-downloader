@@ -64,9 +64,10 @@ for url in "${URLS_ARRAY[@]}"; do
 
     # Define the filename to save the release as
     filename="$repo-$release.zip"
+    dest_file="/plugins/$filename"
 
     # Check if the file already exists and has the correct checksum
-    if [ -f "$filename" ] && [ "$(shasum -a 256 "$filename" | awk '{print $1}')" = "$checksum" ]; then
+    if [ -f "$dest_file" ] && [ "$(shasum -a 256 "$dest_file" | awk '{print $1}')" = "$checksum" ]; then
         log_info "$filename is up to date"
     else
         # Download the release
